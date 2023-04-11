@@ -40,6 +40,12 @@ public class PlayerMovement : MonoBehaviour
 
     public MovementState state;
 
+    private int grassBladeCount = 0;
+    private int bananaCount = 0;
+
+    private TMP_Text grassBladeText;
+    private TMP_Text bananaText;
+
     public enum MovementState {
         walking,
         sprinting, 
