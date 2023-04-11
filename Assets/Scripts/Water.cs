@@ -14,9 +14,5 @@ public class Water : MonoBehaviour
         
     }
 
-    void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag == "Player") {
-            PlayerMovement.Health = 0;
-        }
-    }
+    
 }

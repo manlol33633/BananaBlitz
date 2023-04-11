@@ -77,7 +77,6 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
         {
             rb.drag = groundDrag;
-            Debug.Log("Grounded");
         }
         else
         {
@@ -161,14 +160,21 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void OnCollisionEnter(Collision other) {
-        if (other.gameObject.tag == "Banana") {
+        if (other.gameObject.name == "Enemy") {
+            Health -= 10;
+        }
+    }
+
+    void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag == "Water") {
+            Health = 0;
+            Debug.Log("Player died");
+        } else if (other.gameObject.tag == "Banana") {
             bananaCount++;
             Destroy(other.gameObject);
         } else if (other.gameObject.tag == "Grass Blade") {
             grassBladeCount++;
             Destroy(other.gameObject);
-        } else if (other.gameObject.name == "Enemy") {
-            Health -= 10;
         } else if (other.gameObject.tag == "Bullet") {
             Health -= 20;
         }
