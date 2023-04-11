@@ -41,10 +41,14 @@ public class PlayerMovement : MonoBehaviour
     public MovementState state;
 
     private int grassBladeCount = 0;
-    private int bananaCount = 0;
+    public static int bananaCount = 0;
 
     private TMP_Text grassBladeText;
     private TMP_Text bananaText;
+
+    public static int Health;
+
+    private TMP_Text healthText;
 
     public enum MovementState {
         walking,
@@ -59,10 +63,16 @@ public class PlayerMovement : MonoBehaviour
         rb.freezeRotation = true;
         speedText = GameObject.Find("SpeedText").GetComponent<TMP_Text>();
         startYScale = transform.localScale.y;
+
+        grassBladeText = GameObject.Find("GrassBladeText").GetComponent<TMP_Text>();
+        bananaText = GameObject.Find("BananaText").GetComponent<TMP_Text>();
+        healthText = GameObject.Find("HealthText").GetComponent<TMP_Text>();
+
+        Health = 100;
     }
 
     private void Update () {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 1f, whatIsGround);
 
         if (grounded)
         {
@@ -95,13 +105,6 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
         }
 
-        movementDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-
-        if (movementDirection != Vector3.zero)
-        {
-            orientation.transform.forward = movementDirection;
-        }
-
         Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         if (flatVelocity.magnitude > movementSpeed)
@@ -130,6 +133,17 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.air;
         }
+
+        transform.rotation = orientation.transform.rotation;
+
+        bananaText.text = "Bananas: " + bananaCount;
+        grassBladeText.text = "Grass Blades: " + grassBladeCount + "/5";
+
+        healthText.text = "Health: " + Health;
+
+        if (Health <= 0) {
+            Destroy(gameObject);
+        }
     }
 
     private void FixedUpdate() {
@@ -144,5 +158,19 @@ public class PlayerMovement : MonoBehaviour
 
     private void ResetJump() {
         canJump = true;
+    }
+
+    void OnCollisionEnter(Collision other) {
+        if (other.gameObject.tag == "Banana") {
+            bananaCount++;
+            Destroy(other.gameObject);
+        } else if (other.gameObject.tag == "Grass Blade") {
+            grassBladeCount++;
+            Destroy(other.gameObject);
+        } else if (other.gameObject.name == "Enemy") {
+            Health -= 10;
+        } else if (other.gameObject.tag == "Bullet") {
+            Health -= 20;
+        }
     }
 }

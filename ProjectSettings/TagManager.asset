@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Banana
+  - Grass Blade
   layers:
   - Default
   - TransparentFX
@@ -11,7 +13,7 @@ TagManager:
   - whatIsGround
   - Water
   - UI
-  - 
+  - whatIsPlayer
   - 
   - 
   - 
